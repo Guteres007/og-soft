@@ -25,7 +25,7 @@ class DateInfoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'date' => 'required|date_format:d-m-Y',
+            'date' => 'required|date_format:Y-m-d',
         ];
     }
 
@@ -33,7 +33,7 @@ class DateInfoRequest extends FormRequest
     {
         return [
             'date.required' => 'The date field is required.',
-            'date.date_format' => 'The date field must be in the format d-m-Y.',
+            'date.date_format' => 'The date field must be in the format Y-m-d.',
         ];
     }
 

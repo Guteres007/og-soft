@@ -4,7 +4,8 @@ namespace App\Enums;
 
 enum DayType: string
 {
-    case WorkingDay = 'working day';
+    case WorkingDay = 'WorkingDay';
     case Weekend = 'Weekend';
+    case Holiday = 'Holiday';
 }
 
