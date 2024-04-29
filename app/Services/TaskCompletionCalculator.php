@@ -15,7 +15,6 @@ class TaskCompletionCalculator
     public function calculate(string $startDatetime, int $duration, string $workdayOnly, string $workStartTime, string $workEndTime): string
     {
         $start = Carbon::parse($startDatetime);
-
         $workStart = Carbon::parse($startDatetime)->setTimeFromTimeString($workStartTime);
         $workEnd = Carbon::parse($startDatetime)->setTimeFromTimeString($workEndTime);
 
@@ -23,17 +22,18 @@ class TaskCompletionCalculator
             $start = $this->skipNonWorkingDays($start);
         }
 
+        $firstDayRemainingMinutes = $start->diffInMinutes($workStart);
         $workdayDuration = $workStart->diffInMinutes($workEnd);
+        $daysNeeded = intdiv($duration, $workdayDuration);
+
+        $remainingMinutes = $duration - ($workdayDuration + $firstDayRemainingMinutes);
         if ($duration <= $workdayDuration && $start->copy()->addMinutes($duration)->lte($workEnd)) {
             $start->addMinutes($duration);
         } else {
-
-            $daysNeeded = intdiv($duration, $workdayDuration);
-            $remainingMinutes = $duration % $workdayDuration;
-
             $start->addWeekdays($daysNeeded);
             $start->setTimeFromTimeString($workStartTime);
             if ($remainingMinutes > 0) {
+
                 if ($start->copy()->addMinutes($remainingMinutes)->gte($workEnd)) {
                     $start->addMinutes($remainingMinutes);
                 } else {
@@ -41,7 +41,6 @@ class TaskCompletionCalculator
                 }
             }
         }
-
         return $start->format('Y-m-d H:i:s');
     }
 
