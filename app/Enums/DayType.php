@@ -8,4 +8,3 @@ enum DayType: string
     case Weekend = 'Weekend';
     case Holiday = 'Holiday';
 }
-
